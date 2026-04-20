@@ -3,6 +3,7 @@ const React = require('react');
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
 const { Login } = require('./login.jsx');
+const SignUp = require('./signup.jsx');
 
 const Home = () => {
     return (
@@ -22,6 +23,7 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<SignUp />} />
                 <Route path="*" element={<NF />} />
             </Routes>
         </BrowserRouter>

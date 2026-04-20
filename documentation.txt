@@ -1,0 +1,53 @@
+● What is the intended purpose of your application?
+The intended purpose of this application is to make profit.
+
+● What work has been completed for this milestone?
+project base implementation.
+
+● What work is left, and how do you plan to complete it?
+○ What does your timeline/roadmap look like to finish on time?
+
+● How are you using React?
+I'm using react and some external libraries to make the webpage more flexiable and more beautiful.
+
+● What data are you storing in MongoDB?
+I'm storing user account and user related artwork
+
+● What is your profit model?
+I decided to make a suscription website. Users can pay to subscribe other users to view fans content.
+
+● Do you have a plan for going above and beyond? If so, what is it?
+Yes, I'd like to add videos and images for users upload content.
+
+● If you used any borrowed code or code fragments, where did you get them from?
+Probably from previous homework and projects.
+
+API Documention
+
+URL: /login
+Supported Methods: GET, HEAD
+Middleware: Requires Secure
+Query Params: 
+Description: Login page
+Return Type(s): HTML
+
+URL: /signup
+Supported Methods: GET, HEAD
+Middleware: Requires Secure
+Query Params: 
+Description: Login page
+Return Type(s): HTML
+
+URL: /api/login
+Supported Methods: GET, HEAD
+Middleware: Requires Secure
+Query Params: username (username), password (password)
+Description: Login page
+Return Type(s): HTML
+
+URL: /api/signup
+Supported Methods: GET, HEAD
+Middleware: Requires Secure
+Query Params: username (username), password (password)
+Description: Login page
+Return Type(s): HTML

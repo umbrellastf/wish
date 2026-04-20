@@ -1,14 +1,16 @@
 const React = require('react');
-const { useState, useEffect } = React;
-const { createRoot } = require('react-dom/client');
-const { Link } = require('react-router-dom');
+const { useState } = React;
+
 const { Container, Row, Col, Form, Button, Card } = require('react-bootstrap');
 
-const Login = () => {
+function Signup() {
     const [form, setForm] = useState({
-        username: "",
-        password: ""
+        username: '',
+        password: '',
+        confirmPassword: ''
     });
+
+    const [error, setError] = useState('');
 
     const handleChange = (e) => {
         setForm({
@@ -20,36 +22,29 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Example API call
-        /*
-        fetch("http://localhost:3000/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(form)
-        });
-        */
+        if (form.password !== form.confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+
+        setError('');
+        console.log('Signup:', form);
     };
 
     return (
         <Container className="d-flex align-items-center justify-content-center vh-100">
             <Row>
                 <Col>
-                    <Card style={{ width: "22rem" }} className="p-3 shadow">
-
+                    <Card style={{ width: "24rem" }} className="p-3 shadow">
                         <Card.Body>
-
-                            <h3 className="text-center mb-4">Login</h3>
+                            <h3 className="text-center mb-4">Sign Up</h3>
 
                             <Form onSubmit={handleSubmit}>
-
                                 <Form.Group className="mb-3">
                                     <Form.Label>Username</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="username"
-                                        placeholder="Enter username"
                                         value={form.username}
                                         onChange={handleChange}
                                         required
@@ -61,34 +56,35 @@ const Login = () => {
                                     <Form.Control
                                         type="password"
                                         name="password"
-                                        placeholder="Enter password"
                                         value={form.password}
                                         onChange={handleChange}
                                         required
                                     />
                                 </Form.Group>
 
-                                <Button variant="primary" type="submit" className="w-100">
-                                    Sign In
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Confirm Password</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        name="confirmPassword"
+                                        value={form.confirmPassword}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </Form.Group>
+
+                                {error && <div className="text-danger mb-3">{error}</div>}
+
+                                <Button type="submit" className="w-100">
+                                    Create Account
                                 </Button>
-
-                                <div className="text-center mt-3">
-                                    Need an account? <Link to="/signup">Sign Up</Link>
-                                </div>
-
                             </Form>
-
                         </Card.Body>
-
                     </Card>
                 </Col>
-
             </Row>
-
         </Container>
     );
 }
 
-module.exports = {
-    Login
-}
+module.exports = Signup;
