@@ -1,14 +1,17 @@
 const React = require('react');
-const { useState, useEffect } = React;
-const { createRoot } = require('react-dom/client');
-const { Link } = require('react-router-dom');
+const { useState } = React;
+const { Link, useNavigate } = require('react-router-dom');
 const { Container, Row, Col, Form, Button, Card } = require('react-bootstrap');
 
 const Login = () => {
+    const navigate = useNavigate();
     const [form, setForm] = useState({
         username: "",
         password: ""
     });
+
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
         setForm({
@@ -17,19 +20,34 @@ const Login = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Example API call
-        /*
-        fetch("http://localhost:3000/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(form)
-        });
-        */
+        setError('');
+        setIsLoading(true);
+
+        try {
+            const response = await fetch("/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(form)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError(data.error || 'Unable to sign in');
+                return;
+            }
+
+            navigate('/');
+        } catch (err) {
+            setError('Unable to sign in');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -68,8 +86,10 @@ const Login = () => {
                                     />
                                 </Form.Group>
 
-                                <Button variant="primary" type="submit" className="w-100">
-                                    Sign In
+                                {error && <div className="text-danger mb-3">{error}</div>}
+
+                                <Button variant="primary" type="submit" className="w-100" disabled={isLoading}>
+                                    {isLoading ? 'Signing in...' : 'Sign In'}
                                 </Button>
 
                                 <div className="text-center mt-3">

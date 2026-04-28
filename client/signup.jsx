@@ -1,9 +1,11 @@
 const React = require('react');
 const { useState } = React;
+const { Link, useNavigate } = require('react-router-dom');
 
 const { Container, Row, Col, Form, Button, Card } = require('react-bootstrap');
 
-function Signup() {
+function SignUp() {
+    const navigate = useNavigate();
     const [form, setForm] = useState({
         username: '',
         password: '',
@@ -11,6 +13,7 @@ function Signup() {
     });
 
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
         setForm({
@@ -19,7 +22,7 @@ function Signup() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (form.password !== form.confirmPassword) {
@@ -28,7 +31,33 @@ function Signup() {
         }
 
         setError('');
-        console.log('Signup:', form);
+        setIsLoading(true);
+
+        try {
+            const response = await fetch('/api/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: form.username,
+                    pass: form.password
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError(data.error || 'Unable to create account');
+                return;
+            }
+
+            navigate(data.redirect || '/');
+        } catch (err) {
+            setError('Unable to create account');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -75,9 +104,13 @@ function Signup() {
 
                                 {error && <div className="text-danger mb-3">{error}</div>}
 
-                                <Button type="submit" className="w-100">
-                                    Create Account
+                                <Button type="submit" className="w-100" disabled={isLoading}>
+                                    {isLoading ? 'Creating...' : 'Create Account'}
                                 </Button>
+
+                                <div className="text-center mt-3">
+                                    Already have an account? <Link to="/login">Sign In</Link>
+                                </div>
                             </Form>
                         </Card.Body>
                     </Card>
@@ -87,4 +120,4 @@ function Signup() {
     );
 }
 
-module.exports = Signup;
+module.exports = SignUp;

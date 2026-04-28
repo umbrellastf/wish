@@ -1,53 +1,103 @@
-● What is the intended purpose of your application?
-The intended purpose of this application is to make profit.
-
-● What work has been completed for this milestone?
-project base implementation.
-
-● What work is left, and how do you plan to complete it?
-○ What does your timeline/roadmap look like to finish on time?
+● What is the purpose of your application? What does it do?
+It is similar to twitter but more like onlyfans profit model.
 
 ● How are you using React?
-I'm using react and some external libraries to make the webpage more flexiable and more beautiful.
+○ What components do you have?
+Login, ResetPasasword, SignUp, post, and user.
 
 ● What data are you storing in MongoDB?
-I'm storing user account and user related artwork
+accounts and posts
 
 ● What is your profit model?
-I decided to make a suscription website. Users can pay to subscribe other users to view fans content.
+User need to pay to watch the posts
 
-● Do you have a plan for going above and beyond? If so, what is it?
-Yes, I'd like to add videos and images for users upload content.
+● What went right in the development of this project?
+It works
+
+● What went wrong in the development of this project?
+
+
+● What did you learn while developing this project?
+account system such as login, cache, session
+
+● If you were to continue, what would you do to improve your application?
+In the future, I'd like to add more types of post like images or videos.
+
+● If you went above and beyond, how did you do so?
+From technical perspective, I added react router. 
 
 ● If you used any borrowed code or code fragments, where did you get them from?
-Probably from previous homework and projects.
+What do the code fragments do? Where are they in your code?
+from previous homework and projects.
 
-API Documention
+API Documentation
 
-URL: /login
-Supported Methods: GET, HEAD
-Middleware: Requires Secure
-Query Params: 
-Description: Login page
-Return Type(s): HTML
-
-URL: /signup
-Supported Methods: GET, HEAD
-Middleware: Requires Secure
-Query Params: 
-Description: Login page
-Return Type(s): HTML
+URL: /api/account
+Supported Methods: GET
+Middleware: None
+Query/Body Params: None
+Description: Checks the current session and returns the logged-in account if one exists. Returns an error if the user is not logged in.
+Return Type(s): JSON
 
 URL: /api/login
-Supported Methods: GET, HEAD
-Middleware: Requires Secure
-Query Params: username (username), password (password)
-Description: Login page
-Return Type(s): HTML
+Supported Methods: POST
+Middleware: Requires Secure, Requires Logout
+Query/Body Params: username (required account username), password (required account password)
+Description: Authenticates a user with their username and password. If successful, saves the account information into the session.
+Return Type(s): JSON
+
+URL: /api/logout
+Supported Methods: POST
+Middleware: Requires Login
+Query/Body Params: None
+Description: Destroys the current user's session and logs the user out.
+Return Type(s): Status code
 
 URL: /api/signup
-Supported Methods: GET, HEAD
-Middleware: Requires Secure
-Query Params: username (username), password (password)
-Description: Login page
-Return Type(s): HTML
+Supported Methods: POST
+Middleware: Requires Secure, Requires Logout
+Query/Body Params: username (required new account username), pass (required new account password)
+Description: Creates a new account, hashes the password, saves the account in MongoDB, and logs the new user in.
+Return Type(s): JSON
+
+URL: /api/resetpass
+Supported Methods: POST
+Middleware: Requires Login
+Query/Body Params: username (required username for the account), pass (required new password)
+Description: Resets the password for the provided username by hashing the new password and saving it to the account.
+Return Type(s): JSON
+
+URL: /api/posts
+Supported Methods: GET
+Middleware: None
+Query/Body Params: None
+Description: Retrieves all posts sorted by newest first. If a post is locked Onlyfans content, the response hides the content unless the current user owns or has paid for the post.
+Return Type(s): JSON
+
+URL: /api/users/:username/posts
+Supported Methods: GET
+Middleware: None
+Query/Body Params: username (path parameter for the user whose posts are being requested)
+Description: Retrieves posts created by a specific username. Returns 404 if the username does not exist.
+Return Type(s): JSON
+
+URL: /api/posts
+Supported Methods: POST
+Middleware: Requires Login
+Query/Body Params: content (required post text), onlyfans (optional boolean for locked paid content)
+Description: Creates a new post owned by the logged-in user.
+Return Type(s): JSON
+
+URL: /api/posts/:id/pay
+Supported Methods: POST
+Middleware: Requires Login
+Query/Body Params: id (path parameter for the post being paid for)
+Description: Adds the logged-in user to the post's fans list so they can access locked Onlyfans content.
+Return Type(s): JSON
+
+URL: /api/posts/:id
+Supported Methods: DELETE
+Middleware: Requires Login
+Query/Body Params: id (path parameter for the post being deleted)
+Description: Deletes a post if it exists and is owned by the logged-in user.
+Return Type(s): JSON
